@@ -11,7 +11,7 @@
         :dataTable="dataEducation"
       ></Table>
 
-      <FormTable v-on:formAddData="formAddData" :kindData="'education_data'" ></FormTable>
+      <FormTable v-on:formAddData="formAddData" :kindData="'education_data'"  :saveData="saveData" ></FormTable>
 
     </div>
 </template>
@@ -29,21 +29,24 @@ export default {
   data() {
     return {
       dataEducation: [],
+      saveData: []
     }
   },
   computed:{
     education() {
+      this.dataWorks = this.$store.getters.workData;// добавляю данные на вовод сохранёные уже в сторе
       return this.$store.getters.educationData
     }
   },
   mounted() {
     if(this.education != '') {
-      this.dataEducation = this.education;
+      this.dataEducation = this.education;// вношу данные из хранилищя при инициализации компонента
     }
   },
   methods: {
     formAddData(val) {
-      this.dataEducation = val
+      this.dataEducation = [...this.dataEducation, ...val]
+      this.saveData = [...this.saveData, ...val]
     },
   }
 }

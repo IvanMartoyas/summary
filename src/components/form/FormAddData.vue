@@ -9,10 +9,12 @@
           <input type="date" v-model="dataEnd" placeholder="Окончание работы">
         </div>
         <div class="menuSetup__buttonCont">
-          <button type="submit" :disabled="isNButtonEmpty" :class="{buttonDisable: isNButtonEmpty}" @click.prevent="addItem()">Добавить</button>
-          <button type="submit" class="menuSetup__buttonSave" :disabled="isNButtonEmpty" :class="{buttonDisable: isNButtonEmpty}" @click.prevent="saveDataForm()">Сохранить</button>
+          <button type="submit" :disabled="isNButtonEmpty" class="buttonAdd" :class="{buttonDisable: isNButtonEmpty}" @click.prevent="addItem()">Добавить</button>
+          <button type="submit" class="menuSetup__buttonSave"  :class="{buttonSDisable: isNButtonEmpty}" @click.prevent="saveDataForm()">Сохранить</button>
         </div>
       </div>
+      <div class="title">Инструкция</div>
+      <p>Кнопка добавить добавляет данные в компонент, т.е. сохраняет данные локально, кнопка сохранить сохраняет данные в хранилище vuex, при смене страниц данные которые будут введены в форму сохраниться.</p> 
     </div>
 </template>   
 
@@ -21,15 +23,19 @@ export default {
     name: 'FormAddData',
     components: {
     },
-    props: ['kindData'],
+    props: ['kindData', 'saveData'],
     data() {
         return {
             nameCompany: '',
             descriptionWorck: '',
             dataStart: '',
             dataEnd: '',
+            // nameCompany: 'a',
+            // descriptionWorck: 'j',
+            // dataStart: '19.02.2020',
+            // dataEnd: '20.12.2020',
             dataWorks: [],
-            kindD: ''
+            kindD: '',
         }
     },
     computed:{
@@ -59,7 +65,9 @@ export default {
                 })
 
                 this.$emit('formAddData', this.dataWorks )
-
+                this.dataWorks = []
+                
+                // console.log(" this.dataWorks  ", this.dataWorks )
                 // this.nameCompany = 0
                 // this.descriptionWorck = 0
                 // this.dataStart = 0
@@ -67,22 +75,34 @@ export default {
             }
         },
         saveDataForm() {
-          if(this.dataWorks !='') {
-            try {
-              this.$store.dispatch('saveDataForm', {kind: this.kindD, data: this.dataWorks})
-              this.$store.dispatch('Message', 'Данные сохраненты');
-            }
-            catch (e) {
-                this.$store.dispatch('Message', 'Ошибка: ', e);
-            }
-          } else {
-            this.$store.dispatch('Message', 'Укажите данные');
+            if(this.saveData != ''){
+              if(new Date(this.dataStart) < new Date(this.dataEnd)) {
+                try {
+                  console.log("this.dataWorks ", this.saveData)
+                  this.$store.dispatch('saveDataForm', {kind: this.kindD, data: this.saveData})
+                  this.$store.dispatch('Message', 'Данные сохраненты');
+                }
+                catch (e) {
+                    this.$store.dispatch('Message', 'Ошибка: ', e);
+                }
+              }
+              else {
+                this.$store.dispatch('Message', 'Чтобы сохранить введите корректную дату'); 
+              }
           }
+          else {
+            this.$store.dispatch('Message', 'Перед сохранением добавте данные в таблицу');
+          } 
         }
     }
 }
 </script>
 <style lang="sass">
+input 
+  outline: none
+textarea
+  outline: none
+
 .formTable
   padding: 0 1.5rem;
   &__
@@ -100,7 +120,6 @@ export default {
         width: 100%;
         box-sizing: border-box;
       button
-        background: #000ad2;
         padding: .8rem 1.7rem;
         border-radius: .3rem;
         border: 0;
@@ -108,11 +127,6 @@ export default {
         cursor: pointer;
         transition: .5s
         display: block
-        &:active
-          background: #00078e
-          box-shadow: 0 0 13px 0px #4248ca;
-        &:hover
-          background: #01077b
       textarea
         box-sizing: border-box;
         width: 100%;
@@ -127,8 +141,17 @@ export default {
       justify-content: space-between;
       input
         width: 49%;
+.buttonAdd
+  background: #000ad2;
+  &:active
+    background: #00078e
+    box-shadow: 0 0 13px 0px #4248ca;
+  &:hover
+    background: #01077b
 .buttonDisable
   background: #adb1fd!important
+.buttonSDisable
+  background: #a1caa4!important
 .menuSetup
   &__
     &buttonCont
@@ -139,7 +162,7 @@ export default {
         margin-top: 1rem;
     &buttonSave
       transition: .7s
-      background: #00d210!important
+      background: #00d210
       &:active
         background: #00a20c!important
         box-shadow: 0 0 13px 0px #4248ca;

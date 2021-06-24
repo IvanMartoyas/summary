@@ -47,9 +47,13 @@ body
   min-height: 100%;
   &__
     &message
+      position: fixed;
+      z-index: 9999
+      width: 100%
+      top: 0
+      left: 0
       font-size: .8rem
       padding: .7rem 1.5rem
-      width: auto;
       background: #0a1331
       color: #fff
     &wrapper

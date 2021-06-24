@@ -3,8 +3,14 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     editData: false,
-    works: [],
-    education: [],
+    works: [
+      {"nameCompany":"Альфа Банк","descriptionWorck":"Консультирование по кредитным продуктам.","dataStart":"2020-03-03","dataEnd":"2020-08-30"},
+      {"nameCompany":"РАНО \"Управление образованием\"","descriptionWorck":"Работал системным администратором, настраивал: ЕЦП, расшаривал принтера по сети, устранял неисправности в локальных сетях, заменял ПО и комплектующие на рабочих ПК более чем 130 сотрудников. ","dataStart":"2019-05-01","dataEnd":"2019-08-30"}
+    ],
+    education:  [
+      {"nameCompany":"МИВлГУ Специальность \"Техник программист\"","descriptionWorck":"Изучил языки С++, C#, js, css, html.\nПисал программы на WPF, Win Form.\nИзучил Git Hub.  ","dataStart":"2015-09-01","dataEnd":"2019-07-24"}, 
+      {"nameCompany":"Самообучение","descriptionWorck":"Изучил работу с Bitrix 1c, word press, webpack, jquery, vue js, node express, REST API, PHP, Red bean PHP( ORM для работы с MYSQL), SQL. ","dataStart":"2016-02-27","dataEnd":"2021-06-25"}
+    ],
     message: ''
   },
   mutations: {
@@ -12,14 +18,10 @@ export default createStore({
       return this.state.editData = !this.state.editData;
     },
     saveWorkData({state}, data) {
-      // console.log('data ', data)
-      this.state.works = data
-      // return  console.log('state.works ', this.state.works)
+      this.state.works = [...this.state.works, ...data]
     },
     educationData({state}, data) {
-      // console.log('data ', data)
-      this.state.education = data
-      
+      this.state.education = [...this.state.education, ...data]      
     },
     MessageAdd({state}, data) {
       this.state.message = data
@@ -37,8 +39,10 @@ export default createStore({
  
       if(data.kind == 'worck_data') {
         commit('saveWorkData', data.data)
+        console.log("saveData ",data.data)
       }
       if(data.kind == 'education_data') {
+        console.log("data ", data.data)
         commit('educationData', data.data)
       }
     },

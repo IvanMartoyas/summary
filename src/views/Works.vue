@@ -1,7 +1,7 @@
 <template>
 
     <div class="worck"> 
-      <div class="title">Опыт работы</div>
+      <h2><div class="title">Опыт работы</div></h2>
 
       <Table
         :name="'Название компании'"
@@ -11,7 +11,7 @@
         :dataTable="dataWorks"
       ></Table>
 
-      <FormTable v-on:formAddData="formAddData" :kindData="'worck_data'" ></FormTable>
+      <FormTable v-on:formAddData="formAddData" :kindData="'worck_data'" :saveData="saveData" ></FormTable>
 
     </div>
 </template>
@@ -29,10 +29,12 @@ export default {
   data() {
     return {
       dataWorks: [],
+      saveData: []
     }
   },
   computed:{
     work() {
+      this.dataWorks = this.$store.getters.workData;
       return this.$store.getters.workData
     }
   },
@@ -43,7 +45,9 @@ export default {
   },
   methods: {
     formAddData(val) {
-      this.dataWorks = val
+      this.dataWorks = [...this.dataWorks, ...val]
+
+      this.saveData = [...this.saveData, ...val]
     },
   }
 }

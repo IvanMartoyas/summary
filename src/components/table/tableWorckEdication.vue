@@ -43,12 +43,20 @@ export default {
       display: flex;
       flex-wrap: wrap;
       padding: .7rem 0;
-      border-bottom: 1px solid #cccccc38;
+      align-items: center;
+      
     &nameCompany
-      flex: 1;
+      flex: 3;
+    
+      margin-right: .4rem;
     &descriptionWorck
-      flex: 1;
+     
+      margin-right: .4rem;
+      flex: 4;
+      padding-right: .4rem;
     &dataStart
+    
+      margin-right: .4rem;
       flex: 1;
     &dataEnd
       flex: 1;
